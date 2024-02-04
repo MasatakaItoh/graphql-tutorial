@@ -23,6 +23,26 @@ const resolvers = {
   Author: {
     reviews: (parent) => db.reviews.filter((x) => x.author_id === parent.id),
   },
+  Mutation: {
+    addGame: (_, args) => {
+      const game = {
+        id: Math.floor(Math.random() * 10000).toString(),
+        ...args.game,
+      };
+      db.games.push(game);
+      return game;
+    },
+    deleteGame: (_, args) => {
+      db.games = db.games.filter((x) => x.id !== args.id);
+      return db.games;
+    },
+    updateGame: (_, args) => {
+      db.games = db.games.map((x) =>
+        x.id === args.id ? { ...x, ...args.edits } : x,
+      );
+      return db.games.find((x) => x.id === args.id);
+    },
+  },
 };
 
 const server = new ApolloServer({
