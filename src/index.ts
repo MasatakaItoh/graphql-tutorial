@@ -13,6 +13,16 @@ const resolvers = {
     authors: () => db.authors,
     author: (_, args) => db.authors.find((x) => x.id === args.id),
   },
+  Game: {
+    reviews: (parent) => db.reviews.filter((x) => x.game_id === parent.id),
+  },
+  Review: {
+    game: (parent) => db.games.find((x) => x.id === parent.game_id),
+    author: (parent) => db.authors.find((x) => x.id === parent.author_id),
+  },
+  Author: {
+    reviews: (parent) => db.reviews.filter((x) => x.author_id === parent.id),
+  },
 };
 
 const server = new ApolloServer({
